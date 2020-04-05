@@ -28586,8 +28586,57 @@ var _launchList = _interopRequireDefault(require("../launch-list.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var quarters = {
+  "1": "winter",
+  "2": "spring",
+  "3": "summer",
+  "4": "autumn"
+};
+var months = {
+  "1": "January",
+  "2": "February",
+  "3": "March",
+  "4": "April",
+  "5": "May",
+  "6": "June",
+  "7": "July",
+  "8": "August",
+  "9": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December"
+};
+
 var Index = function Index() {
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("ul", null));
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("ul", null, /*#__PURE__*/_react.default.createElement("li", {
+    className: "header-li"
+  }, /*#__PURE__*/_react.default.createElement("div", {
+    className: "index"
+  }), /*#__PURE__*/_react.default.createElement("div", {
+    className: "mission-name"
+  }, "Mission Name"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "rocket-name"
+  }, "Vehicle name"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "launch-site"
+  }, "Location"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "launch-time"
+  }, "Launch time"), /*#__PURE__*/_react.default.createElement("div", {
+    className: "timer"
+  }, "Before/after launch")), _launchList.default && _launchList.default.length !== 0 ? _launchList.default.map(function (elem, index) {
+    return /*#__PURE__*/_react.default.createElement("li", null, /*#__PURE__*/_react.default.createElement("div", {
+      className: "index"
+    }, index + 1, ". ", "  "), /*#__PURE__*/_react.default.createElement("div", {
+      className: "mission-name"
+    }, elem["mission"] || "no information"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "rocket-name"
+    }, elem["vehicle"] || "no information"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "launch-site"
+    }, elem["location"] || "no information"), /*#__PURE__*/_react.default.createElement("div", {
+      className: "launch-time"
+    }, elem["launch"]["years"] || " ", " ", elem["launch"]["months"] ? months[elem["launch"]["months"]] : "", elem["launch"]["date"] ? ", " + elem["launch"]["date"] : "", " ", elem["launch"]["hours"] ? "at " + elem["launch"]["hours"] : " ", elem["launch"]["minutes"] ? ":" + elem["launch"]["minutes"] : "", " ", elem["launch"]["quarter"] ? "(" + quarters[elem["launch"]["quarter"]] + ")" : ""), /*#__PURE__*/_react.default.createElement("div", {
+      className: "timer"
+    }));
+  }) : null));
 };
 
 _reactDom.default.render( /*#__PURE__*/_react.default.createElement(Index, null), document.querySelector("#root"));
@@ -28619,7 +28668,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59931" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61065" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
