@@ -21,7 +21,28 @@ const months = {
   "11": "November",
   "12": "December",
 };
+const timeBetweenDates = (launch, now) => {
+  let diff = Math.abs(launch - now);
+  let diffMonth = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+  diff -= diffMonth * 1000 * 60 * 60 * 24 * 30;
+  let diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= diffDays * 1000 * 60 * 60 * 24;
+  let diffHours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= diffHours * 1000 * 60 * 60;
+  let diffMinutes = Math.floor(diff / (1000 * 60));
+
+  return `${diffMonth} month(s), ${diffDays} day(s), ${diffHours} hour(s), ${diffMinutes} minute(s) 
+    ${launch > now ? "left" : "passed"}`;
+};
+
 const Index = () => {
+  const [nowTime, setNowTime] = React.useState(Date.now());
+  React.useEffect(() => {
+    const interval = setInterval(() => setNowTime(Date.now()), 1000 * 60);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [setNowTime]);
   return (
     <div>
       <ul>
@@ -31,10 +52,22 @@ const Index = () => {
           <div className="rocket-name">Vehicle name</div>
           <div className="launch-site">Location</div>
           <div className="launch-time">Launch time</div>
-          <div className="timer">Before/after launch</div>
+          <div className="timer">Before/after launch timer</div>
         </li>
         {launchInformation && launchInformation.length !== 0
           ? launchInformation.map((elem, index) => {
+              const launchDate = new Date(`${elem["launch"]["years"] || 0}-${
+                elem["launch"]["months"] || 1
+              }-${elem["launch"]["date"] || 1}${" "}${
+                elem["launch"]["hours"] || 0
+              }:${elem["launch"]["minutes"] || 0}
+            `).getTime();
+              console.log(`${elem["launch"]["years"] || 0}-${
+                elem["launch"]["months"] || 0
+              }-${elem["launch"]["date"] || 0}${" "}${
+                elem["launch"]["hours"] || 0
+              }:${elem["launch"]["minutes"] || 0}
+            `);
               return (
                 <li>
                   <div className="index">
@@ -67,7 +100,11 @@ const Index = () => {
                       ? "(" + quarters[elem["launch"]["quarter"]] + ")"
                       : ""}
                   </div>
-                  <div className="timer"></div>
+                  <div className="timer">
+                    {elem["launch"]["months"]
+                      ? timeBetweenDates(launchDate, nowTime)
+                      : "the exact launch date is unknown"}
+                  </div>
                 </li>
               );
             })

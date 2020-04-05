@@ -28586,6 +28586,18 @@ var _launchList = _interopRequireDefault(require("../launch-list.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var quarters = {
   "1": "winter",
   "2": "spring",
@@ -28607,7 +28619,33 @@ var months = {
   "12": "December"
 };
 
+var timeBetweenDates = function timeBetweenDates(launch, now) {
+  var diff = Math.abs(launch - now);
+  var diffMonth = Math.floor(diff / (1000 * 60 * 60 * 24 * 30));
+  diff -= diffMonth * 1000 * 60 * 60 * 24 * 30;
+  var diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= diffDays * 1000 * 60 * 60 * 24;
+  var diffHours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= diffHours * 1000 * 60 * 60;
+  var diffMinutes = Math.floor(diff / (1000 * 60));
+  return "".concat(diffMonth, " month(s), ").concat(diffDays, " day(s), ").concat(diffHours, " hour(s), ").concat(diffMinutes, " minute(s) \n    ").concat(launch > now ? "left" : "passed");
+};
+
 var Index = function Index() {
+  var _React$useState = _react.default.useState(Date.now()),
+      _React$useState2 = _slicedToArray(_React$useState, 2),
+      nowTime = _React$useState2[0],
+      setNowTime = _React$useState2[1];
+
+  _react.default.useEffect(function () {
+    var interval = setInterval(function () {
+      return setNowTime(Date.now());
+    }, 1000 * 60);
+    return function () {
+      clearInterval(interval);
+    };
+  }, [setNowTime]);
+
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("ul", null, /*#__PURE__*/_react.default.createElement("li", {
     className: "header-li"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -28622,7 +28660,9 @@ var Index = function Index() {
     className: "launch-time"
   }, "Launch time"), /*#__PURE__*/_react.default.createElement("div", {
     className: "timer"
-  }, "Before/after launch")), _launchList.default && _launchList.default.length !== 0 ? _launchList.default.map(function (elem, index) {
+  }, "Before/after launch timer")), _launchList.default && _launchList.default.length !== 0 ? _launchList.default.map(function (elem, index) {
+    var launchDate = new Date("".concat(elem["launch"]["years"] || 0, "-").concat(elem["launch"]["months"] || 1, "-").concat(elem["launch"]["date"] || 1, " ").concat(elem["launch"]["hours"] || 0, ":").concat(elem["launch"]["minutes"] || 0, "\n            ")).getTime();
+    console.log("".concat(elem["launch"]["years"] || 0, "-").concat(elem["launch"]["months"] || 0, "-").concat(elem["launch"]["date"] || 0, " ").concat(elem["launch"]["hours"] || 0, ":").concat(elem["launch"]["minutes"] || 0, "\n            "));
     return /*#__PURE__*/_react.default.createElement("li", null, /*#__PURE__*/_react.default.createElement("div", {
       className: "index"
     }, index + 1, ". ", "  "), /*#__PURE__*/_react.default.createElement("div", {
@@ -28635,7 +28675,7 @@ var Index = function Index() {
       className: "launch-time"
     }, elem["launch"]["years"] || " ", " ", elem["launch"]["months"] ? months[elem["launch"]["months"]] : "", elem["launch"]["date"] ? ", " + elem["launch"]["date"] : "", " ", elem["launch"]["hours"] ? "at " + elem["launch"]["hours"] : " ", elem["launch"]["minutes"] ? ":" + elem["launch"]["minutes"] : "", " ", elem["launch"]["quarter"] ? "(" + quarters[elem["launch"]["quarter"]] + ")" : ""), /*#__PURE__*/_react.default.createElement("div", {
       className: "timer"
-    }));
+    }, elem["launch"]["months"] ? timeBetweenDates(launchDate, nowTime) : "the exact launch date is unknown"));
   }) : null));
 };
 
@@ -28668,7 +28708,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61065" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62902" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
